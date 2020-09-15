@@ -34,14 +34,13 @@ var options = {
 };
 
 if (options.list) {
-	serialport.list(function(err, ports) {
-		if (err) {
-			console.error(err);
-			process.exit(1);
-		}
+	serialport.list().then(ports) {
 		ports.forEach(function(port) {
 			console.log(port.comName);
 		});
+	}).catch(err => {
+		console.error(err);
+		process.exit(1);
 	});
 	return;
 }
@@ -55,11 +54,7 @@ if (options.port) {
     return;
 }
 
-serialport.list(function(err, ports) {
-    if (err) {
-        console.error(err);
-        process.exit(1);
-    }
+serialport.list().then(ports => {
     const choices = ports.map(function(port) {
         return port.comName;
     });
@@ -74,4 +69,7 @@ serialport.list(function(err, ports) {
 
         createServer(options);
     });
+}).catch(err => {
+    console.error(err);
+    process.exit(1);
 });
