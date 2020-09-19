@@ -34,7 +34,7 @@ var options = {
 };
 
 if (options.list) {
-	serialport.list().then(ports) {
+	serialport.list().then(ports => {
 		ports.forEach(function(port) {
 			console.log(port.comName);
 		});
