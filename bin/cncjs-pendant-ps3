@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var program = require('commander');
-var serialport = require('serialport');
+// var serialport = require('serialport');
 var inquirer = require('inquirer');
 var vorpal = require('vorpal')();
 var pkg = require('../package.json');
@@ -9,15 +9,15 @@ var serverMain = require('../index');
 var options = {};
 
 program
-	.version(pkg.version)
-	.usage('-s <secret> -p <port> [options]')
-	.option('-l, --list', 'list available ports then exit')
+    .version(pkg.version)
+    .usage('-s <secret> -p <port> [options]')
+    .option('-l, --list', 'list available ports then exit')
     .option('-s, --secret', 'the secret key stored in the ~/.cncrc file')
-	.option('-p, --port <port>', 'path or name of serial port')
-	.option('-b, --baudrate <baudrate>', 'baud rate (default: 115200)', 115200)
-	.option('--socket-address <address>', 'socket address or hostname (default: localhost)', 'localhost')
-	.option('--socket-port <port>', 'socket port (default: 8000)', 8000)
-	.option('--controller-type <type>', 'controller type: Grbl|Smoothie|TinyG (default: Grbl)', 'Grbl')
+    .option('-p, --port <port>', 'path or name of serial port')
+    .option('-b, --baudrate <baudrate>', 'baud rate (default: 115200)', 115200)
+    .option('--socket-address <address>', 'socket address or hostname (default: localhost)', 'localhost')
+    .option('--socket-port <port>', 'socket port (default: 8000)', 8000)
+    .option('--controller-type <type>', 'controller type: Grbl|Smoothie|TinyG (default: Grbl)', 'Grbl')
     .option('--access-token-lifetime <lifetime>', 'access token lifetime in seconds or a time span string (default: 30d)', '30d')
 
 program.parse(process.argv);
@@ -34,42 +34,43 @@ var options = {
 };
 
 if (options.list) {
-	serialport.list().then(ports => {
-		ports.forEach(function(port) {
-			console.log(port.comName);
-		});
-	}).catch(err => {
-		console.error(err);
-		process.exit(1);
-	});
-	return;
+    serialport.list().then(ports => {
+        ports.forEach(function (port) {
+            console.log(port.comName);
+        });
+    }).catch(err => {
+        console.error(err);
+        process.exit(1);
+    });
+    return;
 }
 
-var createServer = function(options) {
-    serverMain(options, function(err, socket) {});
+var createServer = function (options) {
+    serverMain(options, function (err, socket) {});
 };
 
 if (options.port) {
     createServer(options);
     return;
 }
+createServer(options);
 
-serialport.list().then(ports => {
-    const choices = ports.map(function(port) {
-        return port.comName;
-    });
+// serialport.list().then(ports => {
+//     const choices = ports.map(function(port) {
+//         return port.comName;
+//     });
 
-    inquirer.prompt([{
-        type: 'list',
-        name: 'port',
-        message: 'Specify which port you want to use?',
-        choices: choices
-    }]).then(function(answers) {
-        options.port = answers.port;
+//     inquirer.prompt([{
+//         type: 'list',
+//         name: 'port',
+//         message: 'Specify which port you want to use?',
+//         choices: choices
+//     }]).then(function(answers) {
+//         options.port = answers.port;
 
-        createServer(options);
-    });
-}).catch(err => {
-    console.error(err);
-    process.exit(1);
-});
+//         createServer(options);
+//     });
+// }).catch(err => {
+//     console.error(err);
+//     process.exit(1);
+// });
