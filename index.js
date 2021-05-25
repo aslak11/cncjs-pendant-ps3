@@ -488,9 +488,8 @@ module.exports = function (options, callback) {
 				default:
 					break;
 			}
-			if (event.number === 3 || event.number === 4) {
-				console.log(left_x + " : " + left_x + " : " + stick_left + " : " + event.value + " : " + map(event.value, -32767, 32767, -1.0, 1.0) + " : " + axis())
-			}
+			console.log(left_x + " : " + left_x + " : " + stick_left + " : " + event.value + " : " + map(event.value, -32767, 32767, -1.0, 1.0) + " : " + axis())
+
 		})
 		// // psx
 		// var psx = false;
@@ -818,7 +817,7 @@ module.exports = function (options, callback) {
 			}
 
 			// Debugging
-			// console.log("1 : " + direction + ' | ' + axis + ' | ' + " : " + l1 + " : " + r1);
+			console.log("1 : " + direction + ' | ' + axis + ' | ' + " : " + l1 + " : " + r1);
 		}
 
 		// Set Movemtn Varables
